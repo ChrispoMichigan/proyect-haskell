@@ -14,7 +14,10 @@ ej_grafo1 = G1 [1..5] suc
 
 --- Busca un camino desde u hasta v
 camino1 :: Eq a => Grafo1 a -> a -> a -> [a]
-camino1 g u v = head (caminosDesde1 g u (== v) [])
+camino1 g u v = 
+    case caminosDesde1 g u (== v) [] of
+        (c:_) -> c
+        []    -> error "No hay camino disponible"
 
 --- Encuentra todos los caminos desde origen hasta destinos que cumplan test
 caminosDesde1 :: Eq a => Grafo1 a -> a -> (a -> Bool) -> [a] -> [[a]]
@@ -85,7 +88,10 @@ class Eq v => GrafoBusq v where
   tv :: v -> [v] -> Bool
   
   -- Métodos por defecto
-  camino3 u v = head (caminosDesde3 u (== v) [])
+  camino3 u v = 
+    case caminosDesde3 u (== v) [] of
+        (c:_) -> c
+        []    -> error "No hay camino disponible"
   caminosDesde3 o te vis
     | te o = [o:vis]
     | otherwise = concat [caminosDesde3 o' te (o:vis) | 
