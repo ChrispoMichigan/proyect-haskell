@@ -1,3 +1,9 @@
+
+-- ! Recordarme ejecutar con
+--- ghci capitulo_13.hs
+-- ? luego main
+-- * Por que si no, no jala
+
 -- ============================================================================
 -- Capítulo 13: Juegos - Tres en raya
 -- ============================================================================
@@ -166,7 +172,9 @@ poda n (Nodo x xs) =
 -- selecciona: elige el tablero del primer hijo cuyo valor coincide con la raíz
 selecciona :: Arbol (Valor,Tablero) -> Tablero
 selecciona (Nodo (v,_) ts) =
-    head [t | Nodo (v',t) _ <- ts, v' == v]
+    case [t | Nodo (v',t) _ <- ts, v' == v] of
+        (t:_) -> t
+        []    -> error "No hay movimiento válido"
 
 -- mejorMovimiento t: calcula el mejor movimiento desde el tablero t
 mejorMovimiento :: Tablero -> Tablero
@@ -210,9 +218,9 @@ main = do
     putStrLn (muestraTablero tableroInicial) -- Tablero inicial
     putStr "Comienza el juego? (s/n) "     -- Pregunta al usuario
     l <- getLine                           -- Lee respuesta
-    if head l `elem` ['s','S']             -- Comprueba respuesta
-        then humano tableroInicial         -- Humano comienza
-        else computadora tableroInicial    -- Computadora comienza
+    case l of
+        (c:_) | c `elem` ['s','S'] -> humano tableroInicial    -- Humano comienza
+        _                          -> computadora tableroInicial -- Computadora comienza
 
 -- humano t: maneja el turno del jugador humano
 humano :: Tablero -> IO ()
