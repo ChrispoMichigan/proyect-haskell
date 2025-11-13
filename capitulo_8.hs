@@ -99,7 +99,10 @@ posiciones xs = zip xs [0..]
 
 --- Obtiene la primera posición de un elemento en una lista
 primeraPosicion :: Eq a => a -> [a] -> Int
-primeraPosicion x xs = head [i | (x',i) <- posiciones xs, x' == x]
+primeraPosicion x xs = 
+    case [i | (x',i) <- posiciones xs, x' == x] of
+        (i:_) -> i
+        []    -> error "Elemento no encontrado en la lista"
 
 --- 8.8 Ternas pitagóricas
 
